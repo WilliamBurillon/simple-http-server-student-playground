@@ -1,0 +1,5 @@
+GET http://localhost:8000/api/route-2?favoritesPokemon[]=pikachu&favoritesPokemon[]=pikachu
+name: anthony
+Accept: application/json
+Secret-Code: 522cc88a8ba8f3d53909b8e7bd44ec9f
+###
