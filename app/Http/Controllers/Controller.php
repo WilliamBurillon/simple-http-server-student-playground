@@ -105,8 +105,8 @@ class Controller extends BaseController
         if(!str_contains($request->header('Content-Type'), 'multipart/form-data;')){
             return response('Wrong form type, we want a MultiPart Form data !', 400);
         }
-        dd($request);
-        if(!count($request->allFiles()) > 0){
+
+        if(!$request->hasFile('image')){
             return response('Missing image file in request :(', 400);
         }
 
@@ -118,8 +118,8 @@ class Controller extends BaseController
             return \response('Missing Path parameters :(', 404);
         }
 
-        $this->testPassed('putForm', $request);
-        return \response('Well done ✅');
+        $this->testPassed('putForm', $request->header('Student-Name'));
+        return \response()->json(['status' => 'Well done ✅', 'data' => [$word2, $word1]]);
     }
 
     public function delete(Request $request){

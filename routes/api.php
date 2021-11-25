@@ -43,7 +43,7 @@ Route::middleware(['verify-student', 'cors'])->group(function() {
     Route::delete('/route-6' ,[ Controller::class, 'delete']);
 
     //PUT with URL path parameter
-    Route::patch('/route-7/{word1}/{word2}' ,[ Controller::class, 'putForm']);
+    Route::post('/route-7/{word1}/{word2}' ,[ Controller::class, 'putForm']);
 
     //Patch
     Route::patch('/route-8', [Controller::class, 'patchJson']);
