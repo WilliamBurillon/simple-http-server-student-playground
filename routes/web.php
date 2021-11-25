@@ -20,5 +20,5 @@ Route::get('/', function () {
 });
 
 Route::get('/login', function() {
-    return 'You are not logged in, try to use the /api/login route ;) or /api/register';
+    return response('You are not logged in, try to use the /api/login route ;) or /api/register', 401);
 })->name('login');

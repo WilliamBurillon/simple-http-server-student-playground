@@ -44,7 +44,7 @@ class Controller extends BaseController
             return response('Missing the pokemon name header !', 400);
         }
 
-        $this->testPassed('customHeader', $request->header('name'));
+        $this->testPassed('customHeader', $request->header('Student-Name'));
         return response()->json([
             'name' =>  $request->header('pokemon'),
             'pv' => rand(10, 100),
@@ -79,7 +79,7 @@ class Controller extends BaseController
 
 
 
-        $this->testPassed('arrayInQueryParameter', $request->header('name'));
+        $this->testPassed('arrayInQueryParameter', $request->header('Student-Name'));
         $response = response()->json(['status' => 'Well done ✅', $data]);
 
         $response->header('Secret-Code', md5('salamèche'));
@@ -92,22 +92,21 @@ class Controller extends BaseController
         }
         try {
             $json = json_decode($request->getContent(), true);
-            $this->testPassed('patchJsonBody', $request);
+            $this->testPassed('patchJsonBody', $request->header('Student-Name'));
 
-            $response = \response()->json(['status' => 'Well done ✅',$json]);
-            $response->header('Secret-Code', md5($request->header('name')));
-            return $response;
+            return \response()->json(['status' => 'Well done ✅',$json]);
         } catch (\Exception $exception){
-            return response('Cannot decode data ' . $exception->getMessage(), 400);
+            return response('Cannot decode data, check your JSON ---', 400);
         }
     }
 
-    public function putForm(Request $request){
+    public function putForm(Request $request, $word1, $word2){
+
         if(!str_contains($request->header('Content-Type'), 'multipart/form-data;')){
             return response('Wrong form type, we want a MultiPart Form data !', 400);
         }
 
-        if(!$request->hasFile('image')){
+        if(!$request->has('image')){
             return \response('Missing image file in request :(', 400);
         }
 
@@ -115,11 +114,18 @@ class Controller extends BaseController
             return \response('Missing image description field :(', 400);
         }
 
+        if($word1 == '' || $word2 == ''){
+            return \response('Missing Path parameters :(', 404);
+        }
+
         $this->testPassed('putForm', $request);
         return \response('Well done ✅');
     }
 
     public function delete(Request $request){
+        if(!$request->query->has('user_id')){
+            return \response('missing query parameter :(', 400);
+        }
         $this->testPassed('delete', $request);
         return \response('Well done ✅');
     }
@@ -135,7 +141,7 @@ class Controller extends BaseController
         }
 
         if(!$request->header('Content-Type') ==  'application/json'){
-            return response('Content type for JSON is missing', 400);
+            return response('Wrong or missing Content-Type -> JSON', 400);
         }
 
         try {
@@ -143,7 +149,7 @@ class Controller extends BaseController
             if(!isset($json['type']) || !isset($json['color']) || !isset($json['brand']) || !isset($json['model'])){
                 return response('Missing required value :/', 400);
             }
-            $this->testPassed('jsonBody', $request->header('name'));
+            $this->testPassed('jsonBody', $request->header('Student-Name'));
             return \response()->json(['status' => 'Well done ✅',$json]);
         } catch (\Exception $exception){
             return response('Cannot decode data ' . $exception->getMessage(), 400);
@@ -163,7 +169,7 @@ class Controller extends BaseController
             return \response('Missing image description field :(', 400);
         }
 
-        $this->testPassed('multipartForm', $request->header('name'));
+        $this->testPassed('multipartForm', $request->header('Student-Name'));
         return \response('Well done ✅');
     }
 
@@ -172,11 +178,11 @@ class Controller extends BaseController
             return response('Wrong form type !', 400);
         }
 
-        if(count($request->all()) == 0) {
-            return \response('No data in the form :(', 400);
+        if(count($request->all()) < 3) {
+            return \response('No data or not enough data in the form :(', 400);
         }
 
-        $this->testPassed('urlEncodedForm', $request->header('name'));
+        $this->testPassed('urlEncodedForm', $request->header('Student-Name'));
         return response()->json(['status' => 'Well done ✅', $request->all()]);
     }
 
@@ -188,6 +194,8 @@ class Controller extends BaseController
             $this->testPassed('loggedIn', Auth::user()->name);
 
             return response()->json(['token' => $token->plainTextToken]);
+        }else{
+            return \response('Bad login details or missing', 401);
         }
     }
 

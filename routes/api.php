@@ -30,12 +30,22 @@ Route::middleware(['verify-student'])->group(function() {
     //Waiting for an array of 'favoritePokemons' in query parameters
     Route::get('/route-2', [Controller::class, 'haveQueryParameterArray']);
 
+    //Json Body
     Route::post('/route-3' ,[ Controller::class, 'jsonBody']);
+
+    //Form Data with Image
     Route::post('/route-4' ,[ Controller::class, 'multipartForm']);
+
+    //Url Encoded
     Route::post('/route-5' ,[ Controller::class, 'urlEncoded']);
 
+    //DELETE with query parameter
     Route::delete('/route-6' ,[ Controller::class, 'delete']);
-    Route::put('/route-7' ,[ Controller::class, 'putForm']);
+
+    //PUT with URL path parameter
+    Route::put('/route-7/{word1}/{word2}' ,[ Controller::class, 'putForm']);
+
+    //Patch
     Route::patch('/route-8', [Controller::class, 'patchJson']);
 });
 
