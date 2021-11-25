@@ -15,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['cors', 'auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware(['auth:sanctum', 'cors'])->group(function(){
     Route::get('/route-9', [Controller::class, 'securedRoute']);
 });
 
-Route::middleware(['verify-student'])->group(function() {
+Route::middleware(['verify-student', 'cors'])->group(function() {
     //Waiting for an header 'pikachu'
     Route::get('/route-1', [Controller::class, 'checkHeader']);
 
@@ -43,11 +43,11 @@ Route::middleware(['verify-student'])->group(function() {
     Route::delete('/route-6' ,[ Controller::class, 'delete']);
 
     //PUT with URL path parameter
-    Route::put('/route-7/{word1}/{word2}' ,[ Controller::class, 'putForm']);
+    Route::patch('/route-7/{word1}/{word2}' ,[ Controller::class, 'putForm']);
 
     //Patch
     Route::patch('/route-8', [Controller::class, 'patchJson']);
 });
 
-Route::post('/register', [Controller::class, 'registerApiUser']);
-Route::post('/login', [Controller::class, 'login']);
+Route::post('/register', [Controller::class, 'registerApiUser'])->middleware('cors');
+Route::post('/login', [Controller::class, 'login'])->middleware('cors');

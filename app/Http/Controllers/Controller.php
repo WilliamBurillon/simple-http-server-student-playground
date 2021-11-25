@@ -105,13 +105,13 @@ class Controller extends BaseController
         if(!str_contains($request->header('Content-Type'), 'multipart/form-data;')){
             return response('Wrong form type, we want a MultiPart Form data !', 400);
         }
-
-        if(!$request->has('image')){
-            return \response('Missing image file in request :(', 400);
+        dd($request);
+        if(!count($request->allFiles()) > 0){
+            return response('Missing image file in request :(', 400);
         }
 
         if(!$request->has('image_description')){
-            return \response('Missing image description field :(', 400);
+            return response('Missing image description field :(', 400);
         }
 
         if($word1 == '' || $word2 == ''){
