@@ -19,7 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/route-9', [Controller::class, 'securedRoute']);
+});
 
 Route::middleware(['verify-student'])->group(function() {
     //Waiting for an header 'pikachu'
@@ -35,5 +37,7 @@ Route::middleware(['verify-student'])->group(function() {
     Route::delete('/route-6' ,[ Controller::class, 'delete']);
     Route::put('/route-7' ,[ Controller::class, 'putForm']);
     Route::patch('/route-8', [Controller::class, 'patchJson']);
-
 });
+
+Route::post('/register', [Controller::class, 'registerApiUser']);
+Route::post('/login', [Controller::class, 'login']);

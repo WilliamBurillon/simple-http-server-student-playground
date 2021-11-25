@@ -19,3 +19,6 @@ Route::get('/', function () {
     return view('score', ['studentTests' => $students]);
 });
 
+Route::get('/login', function() {
+    return 'You are not logged in, try to use the /api/login route ;) or /api/register';
+})->name('login');

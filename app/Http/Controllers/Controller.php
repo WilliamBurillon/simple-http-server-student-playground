@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentTest;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -13,16 +14,18 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    private function testPassed($testName, Request $request){
-        $student = StudentTest::whereName($request->header('name'))->firstOr(function() use ($request) {
+    private function testPassed($testName, string $studentName){
+        $student = StudentTest::whereName($studentName)->firstOr(function() use ($studentName) {
             $studentTest = new StudentTest();
-            $studentTest->name= $request->header('name');
+            $studentTest->name= $studentName;
             return $studentTest;
         });
 
@@ -41,7 +44,7 @@ class Controller extends BaseController
             return response('Missing the pokemon name header !', 400);
         }
 
-        $this->testPassed('customHeader', $request);
+        $this->testPassed('customHeader', $request->header('name'));
         return response()->json([
             'name' =>  $request->header('pokemon'),
             'pv' => rand(10, 100),
@@ -76,7 +79,7 @@ class Controller extends BaseController
 
 
 
-        $this->testPassed('arrayInQueryParameter', $request);
+        $this->testPassed('arrayInQueryParameter', $request->header('name'));
         $response = response()->json(['status' => 'Well done ✅', $data]);
 
         $response->header('Secret-Code', md5('salamèche'));
@@ -140,7 +143,7 @@ class Controller extends BaseController
             if(!isset($json['type']) || !isset($json['color']) || !isset($json['brand']) || !isset($json['model'])){
                 return response('Missing required value :/', 400);
             }
-            $this->testPassed('jsonBody', $request);
+            $this->testPassed('jsonBody', $request->header('name'));
             return \response()->json(['status' => 'Well done ✅',$json]);
         } catch (\Exception $exception){
             return response('Cannot decode data ' . $exception->getMessage(), 400);
@@ -160,7 +163,7 @@ class Controller extends BaseController
             return \response('Missing image description field :(', 400);
         }
 
-        $this->testPassed('multipartForm', $request);
+        $this->testPassed('multipartForm', $request->header('name'));
         return \response('Well done ✅');
     }
 
@@ -173,7 +176,51 @@ class Controller extends BaseController
             return \response('No data in the form :(', 400);
         }
 
-        $this->testPassed('urlEncodedForm', $request);
+        $this->testPassed('urlEncodedForm', $request->header('name'));
         return response()->json(['status' => 'Well done ✅', $request->all()]);
+    }
+
+    public function login(Request $request){
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $token = $request->user()->createToken('auth_token');
+            $this->testPassed('loggedIn', Auth::user()->name);
+
+            return response()->json(['token' => $token->plainTextToken]);
+        }
+    }
+
+    public function securedRoute(Request $request): JsonResponse
+    {
+        $this->testPassed('accessedSuperSecuredData', $request->user()->name);
+        return \response()->json(['status' => 'Well done ✅', 'superSecuredData' => 'https://checkboxolympics.com/', 'moreUselessWeb' => 'https://theuselessweb.com/']);
+    }
+
+    public function registerApiUser(Request $request): JsonResponse
+    {
+        $request->validate(
+            [
+                'name' => 'required|string|max:30',
+                'email' => 'required|email|unique:users',
+                'password' =>
+                    [
+                        'required',
+                        'string'
+                    ]
+            ]
+        );
+
+        $user = new User();
+
+        $user->password = Hash::make($request->password);
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->save();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->testPassed('registrationCompleted', $user->name);
+        return response()->json(['status' => 'Well done ✅, you are now registered in the API']);
     }
 }
