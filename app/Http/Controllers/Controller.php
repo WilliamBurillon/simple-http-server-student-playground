@@ -126,7 +126,7 @@ class Controller extends BaseController
         if(!$request->query->has('user_id')){
             return \response('missing query parameter :(', 400);
         }
-        $this->testPassed('delete', $request);
+        $this->testPassed('delete', $request->header('Student-Name'));
         return \response('Well done ✅');
     }
 
