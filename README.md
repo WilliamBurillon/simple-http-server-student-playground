@@ -20,6 +20,8 @@ Pour faire fonctionner ce sujet il faudra d'abord déployer Laravel + une base d
 ## Utilisation
 Les étudiants ont simplement à lire les instructions, la construction des phrases est volontairement organique et pas forcément claire techniquement pour les guider dans la recherche de la bonne réponse.
 
+* La route `/` permet de consulter les score des étudiants et de voir leur avancement en temps réel. Utile pour présenter au vidéo projecteur et rendre le cours plus ludique.
+
 ### Par exemple :
 > Le domaine de l'API est herokuapp.com le schéma d'url est https et le sous domaine est m1-mds-web-simple-api-tester.
 
