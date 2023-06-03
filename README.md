@@ -1,3 +1,32 @@
+# Remise à niveau HTTP - Etudiants 
+
+Ce repository contient le code source de l'application de démonstration utilisée pour le cours de remise à niveau HTTP, le sujet est disponible dans `instructions-students`.
+
+Voir le sujet : [instructions-students/README.md](instructions-students/README.md)
+
+> 🔥 **Penser à bien modifier le contenu avec l'URL du serveur déployé** 🔥
+
+## Installation
+
+Pour faire fonctionner ce sujet il faudra d'abord déployer Laravel + une base de donnée. 
+1. Dupliquer .env.example et éditer .env avec les bonnes informations de connexion à la base de donnée
+2. Installer les dépendances PHP avec composer : `composer install`
+3. (Si besoin) Générer une clé d'application : `php artisan key:generate`
+4. Lancer les migrations : `php artisan migrate`
+5. Lancer le serveur : `php artisan serve`
+
+> J'utilisais personnellement Heroku qui permet de déployer une application Laravel en quelques minutes, mais il est possible d'utiliser n'importe quel autre hébergeur. A tester en herbergeur cloud gratuit : Render.
+
+## Utilisation
+Les étudiants ont simplement à lire les instructions, la construction des phrases est volontairement organique et pas forcément claire techniquement pour les guider dans la recherche de la bonne réponse.
+
+### Par exemple :
+> Le domaine de l'API est herokuapp.com le schéma d'url est https et le sous domaine est m1-mds-web-simple-api-tester.
+
+Au lieu de simplement leur donner l'URL de l'API, on leur donne des indices pour qu'ils comprennent comment fonctionne une URL et comment la décomposer.
+
+# Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
@@ -48,19 +77,3 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 - **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
 - **[Lendio](https://lendio.com)**
 - **[Romega Software](https://romegasoftware.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

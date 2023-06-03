@@ -31,7 +31,7 @@ Route::middleware(['verify-student', 'cors'])->group(function() {
     Route::get('/route-2', [Controller::class, 'haveQueryParameterArray']);
 
     //Json Body
-    Route::post('/route-3' ,[ Controller::class, 'jsonBody']);
+    Route::post('/route-3' ,[Controller::class, 'jsonBody']);
 
     //Form Data with Image
     Route::post('/route-4' ,[ Controller::class, 'multipartForm']);
